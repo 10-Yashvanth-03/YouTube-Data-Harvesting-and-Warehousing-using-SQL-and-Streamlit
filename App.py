@@ -18,7 +18,7 @@ from datetime import timedelta
 #API Key connection to interact with youtube API
 
 def Api_connect():
-    api_key='AIzaSyDTOnWB_ONk49UMnF9QaOV_g3RCJOUDEe8'
+    api_key='Your_API_KEY'
 
     api_service_name = "youtube"
     api_version = "v3"
@@ -32,12 +32,12 @@ youtube=Api_connect()
 #mycursor and engine created to interact with MySQL Database
 mydb = mysql.connector.connect(
   host="localhost",
-  user="root",
-  password="Yash",
-  database="Youtube"
+  user="Your_User_Name",
+  password="Your_Password",
+  database="Your_DatabaseName"
 )
 mycursor = mydb.cursor()
-engine = create_engine("mysql+mysqlconnector://root:Yash@localhost/Youtube")
+engine = create_engine("mysql+mysqlconnector://Your_User_Nmae:Your_Password@localhost/Youtube")
 
 #To create and use the database in MySQL databse
 mycursor.execute("create database if not exists Youtube")
