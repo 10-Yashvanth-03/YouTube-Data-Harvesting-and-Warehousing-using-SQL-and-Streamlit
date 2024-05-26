@@ -34,7 +34,7 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="Your_User_Name",
   password="Your_Password",
-  database="Your_DatabaseName"
+  database="Your_Database_Name"
 )
 mycursor = mydb.cursor()
 engine = create_engine("mysql+mysqlconnector://Your_User_Nmae:Your_Password@localhost/Youtube")
