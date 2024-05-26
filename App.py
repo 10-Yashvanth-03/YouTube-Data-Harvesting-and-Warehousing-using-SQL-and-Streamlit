@@ -40,13 +40,13 @@ mycursor = mydb.cursor()
 engine = create_engine("mysql+mysqlconnector://Your_User_Nmae:Your_Password@localhost/Youtube")
 
 #To create and use the database in MySQL databse
-mycursor.execute("create database if not exists Youtube")
-mycursor.execute("use Youtube")
+mycursor.execute("create database if not exists Your_Database_Name")
+mycursor.execute("use Your_Database_Name")
 
 
 
 #Setting up Streamlit page
-icon=Image.open('E:\Education\YouTube Data Harvesting\YouTube.png')
+icon=Image.open('Your_File_path/YouTube.png')
 st.set_page_config(page_title='YouTube data Harvesting And Warehousing',
                    page_icon=icon,
                    layout="wide",
