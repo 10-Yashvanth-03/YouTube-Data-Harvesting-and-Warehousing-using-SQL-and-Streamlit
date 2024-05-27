@@ -66,9 +66,9 @@ if selected == "Home":
     st.title('_*:red[YouTube] :green[Data Harvesting and Warehousing using SQL and Streamlit]*_')    
     st.subheader(':blue[Domain :] Social Media')  
     st.subheader(':blue[Overview :]')
-    st.markdown('''*Building a simple dashboard or UI using Streamlit and retrive YouTube channel data with
-                   the help of the YouTube API. Stored the data in a SQL database, enabelling quering of 
-                   the data using SQL within the Streamlit app.*''')   
+    st.markdown('''*This project involves harvesting YouTube data using the YouTube Data API, storing it in a MySQL database, 
+                    and visualizing the data using a Streamlit dashboard. The aim is to facilitate data analysis and insights 
+                    through efficient data collection, storage, and visualization.*''')   
     st.subheader(':blue[Skills Take Away :]')    
     st.markdown('*- Python scripting*')   
     st.markdown('*- Data Collection*')
