@@ -103,7 +103,7 @@ def Channel_Details(channel_id):
         'Channel_Name': response['items'][0]['snippet']['title'],
         'Channel_Thumbnail' : response['items'][0]['snippet']['thumbnails']['default']['url'],
         'Channel_Description': response['items'][0]['snippet']['description'],
-        'Publisihed_Date':published_at_mysql_format,
+        'Published_At':published_at_mysql_format,
         'Subscriber_Count':response['items'][0]['statistics']['subscriberCount'],
         'Channel_VideoCount': response['items'][0]['statistics']['videoCount'],
         'Channel_ViewCount':response['items'][0]['statistics']['viewCount'],
@@ -237,7 +237,7 @@ if selected == "Data collection and upload":
                 st.write('**:red[Subscriber Count]** :', extracted_details['Subscriber_Count']) 
                 st.write('**:red[Total Videos]** :', extracted_details['Channel_VideoCount']) 
                 st.write('**:red[Total View]** :', extracted_details['Channel_ViewCount'])
-                st.write('**:red[Joined]** :', extracted_details['Publisihed_Date']) 
+                st.write('**:red[Joined]** :', extracted_details['Published_At']) 
             except HttpError as e:
                 if e.resp.status == 403 and e.error_details[0]["reason"] == 'quotaExceeded':
                    st.error(" API Quota exceeded. Please try again later.")
@@ -258,7 +258,7 @@ if selected == "Data collection and upload":
                                                                         Channel_videoCount BIGINT,
                                                                         Channel_ViewCount BIGINT,
                                                                         Playlist_Id VARCHAR(255),
-                                                                        Publisihed_Date DATETIME )''') 
+                                                                        Published_At DATETIME )''') 
                 #To create videos table in sql database
                 mycursor.execute(''' create table if not exists Videos(Channel_Id VARCHAR(255),
                                                                     Video_Id VARCHAR(255) PRIMARY KEY,
