@@ -300,11 +300,8 @@ if selected == "Data collection and upload":
                 error_message = f"Error retriving playlists: {e}" # To handle specific YouTube API erroes
                 st.error(error_message)
 
-#function to retrive channel name Sql DB
-def Fetch_Channel_Namee(Channel_Name):
-    mycursor.execute("Select Channel_Name from Channel")
-    Channel_names= [row[0] for row in mycursor.fetchall()]
-    return Channel_names
+
+#To fetch Channel Data by selecting Channel Name
 #funtion to fetch Channel details
 def fetch_data_by_channel_name(Channel_Name):
     query = f"SELECT * FROM Channel WHERE Channel_Name = '{Channel_Name}'"
