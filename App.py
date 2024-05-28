@@ -330,16 +330,16 @@ def fetch_comment_data_by_channel_name(Channel_Name):
     data = pd.read_sql_query(query, engine)
     return data
 
-#To get Unique channel name and reads the results of an SQL query into a DataFrame 
-query_unique_channels = "SELECT DISTINCT Channel_Name FROM Channel"
-unique_channels = pd.read_sql_query(query_unique_channels, engine)
-
 
 #Setting up the option "MYSQL Database" in streamlit page
 if selected == "MYSQL Database":
     st.title("**_:green[MYSQL Database]_**")
 
-    selected_channel = st.selectbox('Select Channel Name:', unique_channels['Channel_Name']) 
+    #To get Unique channel name and reads the results of an SQL query into a DataFrame 
+    query_unique_channels = "SELECT DISTINCT Channel_Name FROM Channel"
+    unique_channels = pd.read_sql_query(query_unique_channels, engine)
+
+    selected_channel = st.selectbox('Select Channel Name:', unique_channels['Channel_Name'])  #To Select Channel Name
     
     #Channel table For selected Channel Name
     if selected_channel:
