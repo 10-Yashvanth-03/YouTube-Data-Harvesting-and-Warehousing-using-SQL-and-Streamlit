@@ -45,9 +45,6 @@ This project involves harvesting YouTube data using the YouTube Data API, storin
 - import mysql.connector
 - from sqlalchemy import create_engine
 
-#### File handling libraries
-- import json
-
 #### formatting ISO 8601 date and duration
 - import isodate
 
