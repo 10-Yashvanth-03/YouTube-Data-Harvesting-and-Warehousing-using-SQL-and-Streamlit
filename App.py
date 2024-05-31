@@ -1,4 +1,3 @@
-
 import streamlit as st
 from streamlit_option_menu import option_menu
 from PIL import Image
@@ -17,7 +16,7 @@ from datetime import timedelta
 #API Key connection to interact with youtube API
 
 def Api_connect():
-    api_key='Your_API_KEY'
+    api_key='AIzaSyDdqcB8uqE63qtuzpwpM1rTEiSeN4K2R-k'
 
     api_service_name = "youtube"
     api_version = "v3"
@@ -31,21 +30,21 @@ youtube=Api_connect()
 #mycursor and engine created to interact with MySQL Database
 mydb = mysql.connector.connect(
   host="localhost",
-  user="Your_User_Name",
-  password="Your_Password",
-  database="Your_Database_Name"
+  user="root",
+  password="Yash",
+  database="Youtube"
 )
 mycursor = mydb.cursor()
-engine = create_engine("mysql+mysqlconnector://Your_User_Nmae:Your_Password@localhost/Youtube")
+engine = create_engine("mysql+mysqlconnector://root:Yash@localhost/Youtube")
 
 #To create and use the database in MySQL databse
-mycursor.execute("create database if not exists Your_Database_Name")
-mycursor.execute("use Your_Database_Name")
+mycursor.execute("create database if not exists Youtube")
+mycursor.execute("use Youtube")
 
 
 
 #Setting up Streamlit page
-icon=Image.open('Your_File_path/YouTube.png')
+icon=Image.open('E:\Education\YouTube Data Harvesting\YouTube.png')
 st.set_page_config(page_title='YouTube data Harvesting And Warehousing',
                    page_icon=icon,
                    layout="wide",
@@ -74,6 +73,8 @@ if selected == "Home":
     st.markdown('*- Streamlit*')
     st.markdown('*- Data Management using SQL*')
 
+
+
 #Function to convert duration from ISO 8601 format to MySQL's datetime format 
 def convert_to_mysql_datetime(PublishedAt):
     try:
@@ -85,6 +86,7 @@ def convert_to_mysql_datetime(PublishedAt):
     except ValueError:
         # Handle invalid datetime format
         return None
+
 
 #Function to Get Channel_Details
 def Channel_Details(channel_id):
@@ -149,6 +151,7 @@ def convert_duration(duration_str):
         return "Invalid duration"   
 
 
+
 #Function to Get Video Details 
 def Video_Details(Video_ids):
 
@@ -164,7 +167,7 @@ def Video_Details(Video_ids):
         PublishedAt=response['items'][0]['snippet']['publishedAt']
         published_at_mysql_format = convert_to_mysql_datetime(PublishedAt)
         
-        #Converting Duration ISO 8601 format to HH:MM:SS format
+        #Converting Video Duration ISO 8601 format to HH:MM:SS format
         Duration= response['items'][0]['contentDetails']['duration']
         Duration= convert_duration(Duration)
 
@@ -188,6 +191,7 @@ def Video_Details(Video_ids):
     
     return Video_data
   
+
 
 #Function to Get Comment Details    
 def Comment_Details(Video_ids):
@@ -216,6 +220,7 @@ def Comment_Details(Video_ids):
         pass
     
     return Comment_data
+
 
 
 
@@ -288,17 +293,21 @@ if selected == "Data collection and upload":
 
                 #To load DataFrame into table in SQL Database
                 df_channel.to_sql('Channel',engine,if_exists= 'append',index=False)
-                df_videos['Tags']= df_videos['Tags'].apply(lambda x: ','.join(x) if isinstance(x, list) else '' )
+                df_videos['Tags']= df_videos['Tags'].apply(lambda x: ','.join(x) if isinstance(x, list) else '' ) #This line converts lists of tags in the 'Tags' column into comma-separated strings.
                 df_videos.to_sql('Videos',engine,if_exists= 'append',index=False)
                 df_comments.to_sql('Comments',engine,if_exists= 'append',index=False)
                 mydb.commit()
+                
                 st.success('Channel, Videos, Comments Details are Uploaded Successfully')
             except HttpError as e:
-                error_message = f"Error retriving playlists: {e}" # To handle specific YouTube API erroes
+                error_message = f"Error retriving playlists: {e}" # To handle specific erroes
                 st.error(error_message)
 
 
+
+
 #To fetch Channel Data by selecting Channel Name
+
 #funtion to fetch Channel details
 def fetch_data_by_channel_name(Channel_Name):
     query = f"SELECT * FROM Channel WHERE Channel_Name = '{Channel_Name}'"
@@ -315,6 +324,7 @@ def fetch_video_data_by_channel_name(Channel_Name):
     """
     data = pd.read_sql_query(query, engine)
     return data
+
 #function to fetch Comments detail
 def fetch_comment_data_by_channel_name(Channel_Name):
     query = f"""
@@ -331,12 +341,12 @@ def fetch_comment_data_by_channel_name(Channel_Name):
 #Setting up the option "MYSQL Database" in streamlit page
 if selected == "MYSQL Database":
     st.title("**_:green[MYSQL Database]_**")
-
+    
     #To get Unique channel name and reads the results of an SQL query into a DataFrame 
     query_unique_channels = "SELECT DISTINCT Channel_Name FROM Channel"
     unique_channels = pd.read_sql_query(query_unique_channels, engine)
-
-    selected_channel = st.selectbox('Select Channel Name:', unique_channels['Channel_Name'])  #To Select Channel Name
+    
+    selected_channel = st.selectbox('Select Channel Name:', unique_channels['Channel_Name']) #To Select Channel Name
     
     #Channel table For selected Channel Name
     if selected_channel:
@@ -353,7 +363,7 @@ if selected == "MYSQL Database":
     if selected_channel:
         video_data = fetch_video_data_by_channel_name(selected_channel)
         if not video_data.empty:
-            st.subheader("**:blue[Video Data for Channel]**:", selected_channel)
+            st.subheader("**:blue[Video Data for selected Channel]**:", selected_channel)
             st.write(video_data)
         else:
             st.write("No video data found for the selected channel.")
@@ -364,7 +374,7 @@ if selected == "MYSQL Database":
     if selected_channel:
         comment_data = fetch_comment_data_by_channel_name(selected_channel)
         if not comment_data.empty:
-            st.subheader("**:blue[Comment Data for Channel]**:", selected_channel)
+            st.subheader("**:blue[Comment Data for selected Channel]**:", selected_channel)
             st.write(comment_data)
         else:
             st.write("No comment data found for the selected channel.")
@@ -375,7 +385,8 @@ if selected == "MYSQL Database":
        
             
 #function to execute Query for 10 questions
-# 1st Question
+
+# 1st Question 'What are the names of all the videos and their corresponding channels?'
 def Sql_Question_1():
     mycursor.execute('''select Channel.Channel_name,Videos.Video_Title from videos
                         Join Channel on Channel.Channel_Id = Videos.Channel_Id
@@ -384,7 +395,7 @@ def Sql_Question_1():
     Q1= pd.DataFrame(out, columns= ['Channel Name', 'Videos Name']).reset_index(drop=True)
     st.dataframe(Q1)                        
 
-# 2nd Question
+# 2nd Question 'Which channels have the most number of videos, and how many videos do they have?'
 def Sql_Question_2():
     mycursor.execute(''' Select Distinct Channel_name, count(Videos.Video_Id) as Total_Videos
                         From Channel
@@ -396,7 +407,7 @@ def Sql_Question_2():
     Q2.index +=1
     st.dataframe(Q2)
 
-# 3rd Question
+# 3rd Question ' What are the top 10 most viewed videos and their respective channels?'
 def Sql_Question_3():
     mycursor.execute(''' Select Channel.Channel_Name, Videos.Video_Title, Videos.View_Count as Total_Views From Videos
                          join Channel on Channel.Channel_Id = Videos.Channel_Id
@@ -407,7 +418,7 @@ def Sql_Question_3():
     Q3.index +=1
     st.dataframe(Q3) 
 
-# 4th Question
+# 4th Question 'How many comments were made on each video, and what are their corresponding video names?'
 def Sql_Question_4():
     mycursor.execute(''' Select Videos.Video_title, Videos.Comment_Count as Total_Comments
                          from Videos
@@ -417,7 +428,7 @@ def Sql_Question_4():
     Q4.index +=1
     st.dataframe(Q4) 
 
-# 5th Question
+# 5th Question 'Which videos have the highest number of likes, and what are their corresponding channel names?'
 def Sql_Question_5():
     mycursor.execute(''' Select Channel.Channel_Name,Videos.Video_Title, Videos.Like_Count as Highest_likes from Videos
                          Join Channel on Videos.Channel_Id=Channel.Channel_Id  
@@ -429,7 +440,7 @@ def Sql_Question_5():
     Q5.index +=1
     st.dataframe(Q5)   
 
-# 6th Question
+# 6th Question ' What is the total number of likes and dislikes for each video, and what are their corresponding video names?'
 def Sql_Question_6():
     mycursor.execute(''' Select Videos.Video_Title, Videos.Like_Count as Likes 
                          From Videos
@@ -439,7 +450,7 @@ def Sql_Question_6():
     Q6.index +=1
     st.dataframe(Q6) 
 
-# 7th Question
+# 7th Question 'What is the total number of views for each channel, and what are their corresponding channel names?'
 def Sql_Question_7():
     mycursor.execute(''' Select Channel.Channel_Name, Channel.Channel_ViewCount as Total_Views 
                          From Channel
@@ -449,7 +460,7 @@ def Sql_Question_7():
     Q7.index +=1
     st.dataframe(Q7)                      
 
-# 8th Question
+# 8th Question 'What are the names of all the channels that have published videos in the year 2022?'
 def Sql_Question_8():
     mycursor.execute(''' Select Distinct Channel.Channel_name From Channel
                          Join Videos on Videos.Channel_Id = Channel.Channel_Id
@@ -459,18 +470,19 @@ def Sql_Question_8():
     Q8.index +=1
     st.dataframe(Q8) 
 
-# 9th Question
+# 9th Question 'What is the average duration of all videos in each channel, and what are their corresponding channel names?'
 def Sql_Question_9():
     mycursor.execute(''' Select Channel.Channel_Name, time_format(Sec_to_Time(Avg(Time_to_sec(Time(Videos.Duration)))), "%H:%i:%s")as Avg_Duration 
                          From videos
                          join Channel on Channel.Channel_Id = Videos.Channel_Id
-                         Group by Channel_Name  ''')
+                         Group by Channel_Name
+                         Order by Channel_Name  ''')
     out= mycursor.fetchall()
     Q9= pd.DataFrame(out, columns= ['Channel Name','Average Duration']).reset_index(drop=True)
     Q9.index +=1
     st.dataframe(Q9) 
 
-# 10th Question
+# 10th Question 'Which videos have the highest number of comments, and what are their corresponding channel names?'
 def Sql_Question_10():
     mycursor.execute(''' Select Channel.Channel_Name, Videos.Video_Title, Videos.Comment_Count as Total_Comments
                          From Videos
