@@ -93,7 +93,7 @@ This project involves harvesting YouTube data using the YouTube Data API, storin
 - We can see the Home page.
 #### Step-2:
 - Click "Data collection and Upload".
-- Copy the Channel Id from Youtube( Open Youtube --> Click the Channel Name --> Click this ">" symbol and scrolldown --> click Share channel --> click "Copy channel ID").
+- Copy the Channel Id from Youtube( Open Youtube --> Click the Channel Name --> Click this ">" / "more" and scrolldown --> click Share channel --> click "Copy channel ID").
 - Paste the copied Link in the "Enter the Channel ID" box.
 - Click "View Details" for Channel Details.
 - After seeing the Channel Details, click the "Upload to MySQL database"("Uploading.."  message will appear with spinner.).
