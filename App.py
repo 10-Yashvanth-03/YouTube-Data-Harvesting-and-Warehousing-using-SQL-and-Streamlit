@@ -4,7 +4,6 @@ from streamlit_option_menu import option_menu
 from PIL import Image
 import googleapiclient.discovery
 import pandas as pd
-import json
 from datetime import datetime
 import mysql.connector
 from sqlalchemy import create_engine
@@ -176,7 +175,7 @@ def Video_Details(Video_ids):
             'Video_Title':item['snippet']['title'],
             'Video_Description' : item['snippet']['description'],
             'Tags' : item['snippet'].get('tags'),
-            'Thunbnail' : item['snippet']['thumbnails']['default']['url'],
+            'Thumbnail' : item['snippet']['thumbnails']['default']['url'],
             'Published_At' : published_at_mysql_format,
             'Duration' : Duration,
             'Caption_Status' : item['contentDetails']['caption'],
@@ -265,7 +264,7 @@ if selected == "Data collection and upload":
                                                                     Video_Title VARCHAR(500),
                                                                     Video_Description LONGTEXT,
                                                                     Tags LONGTEXT,
-                                                                    Thunbnail VARCHAR(255),
+                                                                    Thumbnail VARCHAR(255),
                                                                     Published_At  DATETIME,
                                                                     Duration TIME,
                                                                     View_Count  BIGINT,
@@ -289,9 +288,7 @@ if selected == "Data collection and upload":
 
                 #To load DataFrame into table in SQL Database
                 df_channel.to_sql('Channel',engine,if_exists= 'append',index=False)
-                df_videos['Thunbnail'] = df_videos['Thunbnail'].apply(json.dumps)
                 df_videos['Tags']= df_videos['Tags'].apply(lambda x: ','.join(x) if isinstance(x, list) else '' )
-                
                 df_videos.to_sql('Videos',engine,if_exists= 'append',index=False)
                 df_comments.to_sql('Comments',engine,if_exists= 'append',index=False)
                 mydb.commit()
