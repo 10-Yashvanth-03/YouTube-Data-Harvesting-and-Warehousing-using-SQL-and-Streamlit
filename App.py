@@ -16,7 +16,7 @@ from datetime import timedelta
 #API Key connection to interact with youtube API
 
 def Api_connect():
-    api_key='AIzaSyDdqcB8uqE63qtuzpwpM1rTEiSeN4K2R-k'
+    api_key='Your_API_KEY'
 
     api_service_name = "youtube"
     api_version = "v3"
