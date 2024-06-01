@@ -30,21 +30,21 @@ youtube=Api_connect()
 #mycursor and engine created to interact with MySQL Database
 mydb = mysql.connector.connect(
   host="localhost",
-  user="root",
-  password="Yash",
-  database="Youtube"
+  user="User_Name",
+  password="password",
+  database="Database_Name"
 )
 mycursor = mydb.cursor()
-engine = create_engine("mysql+mysqlconnector://root:Yash@localhost/Youtube")
+engine = create_engine("mysql+mysqlconnector://User_Name:password@localhost/Database_Name")
 
 #To create and use the database in MySQL databse
-mycursor.execute("create database if not exists Youtube")
-mycursor.execute("use Youtube")
+mycursor.execute("create database if not exists Database_Name")
+mycursor.execute("use Database_Name")
 
 
 
 #Setting up Streamlit page
-icon=Image.open('E:\Education\YouTube Data Harvesting\YouTube.png')
+icon=Image.open('Your_FilePath\YouTube.png')
 st.set_page_config(page_title='YouTube data Harvesting And Warehousing',
                    page_icon=icon,
                    layout="wide",
